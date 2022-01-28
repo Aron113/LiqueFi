@@ -22,6 +22,7 @@ contract Liquefi{
     uint public currentBalance=0;
     address public user;
     int public priceSet;
+    string public Notyet='not yet';
     
 
     function setPrice(int setprice) public {                //Set repayment price
@@ -29,12 +30,14 @@ contract Liquefi{
         priceSet=setprice;
     }
 
-    function repayLoan() public{                            //Function to be called continuously by relayer
-        require(priceSet>=getLatestPrice());                //priceSet >= realPrice for our contract to call the lending pool's repay() function
+    function repayLoan() public returns (string memory){     //Function to be called continuously by relayer                            
+        if (priceSet>=5){               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).approve(lendingpool,currentBalance);
         IlendingPool(lendingpool).repay(currentBalance);
-        currentBalance=0;
-    
+        currentBalance=0;}
+        else{
+            return Notyet;
+        }
     }
 
     function getLatestPrice() public view returns (int) {     //Get latest price from Chainlink data feed      
