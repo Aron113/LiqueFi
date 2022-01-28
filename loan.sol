@@ -5,6 +5,10 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
  interface IlendingPool{                                  //Define lending pool's interface
         function repay(uint amount) payable external;     //Use lending pool's repay() function
     }
+interface chainlink{                                                                                    //Define chainlink token's interface
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);   //Use the transferFrom() function 
+}
     
 contract Liquefi{
    
@@ -19,17 +23,8 @@ contract Liquefi{
     address public user;
     int public priceSet;
     
-    function deposit() public payable{                      //Deposit funds into contract
-        require(msg.sender==user);
-        currentBalance=currentBalance + msg.value;
-    }
-
-    function withDraw(uint amountWithdraw) public {         //Withdraw balance      
-        require(msg.sender==user,'Not a user!');
-        require(amountWithdraw<=currentBalance);            //Withdraw amount must be <= current Balance
-        payable(msg.sender).call{value:amountWithdraw}('');
-        currentBalance=currentBalance-amountWithdraw;
-    }
+   
+    
 
     function setPrice(int setprice) public {                //Set repayment price
         require(msg.sender==user,'Not a user!');
@@ -52,5 +47,18 @@ contract Liquefi{
             uint80 answeredInRound
         ) =  AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e).latestRoundData(); // ETH/USD PRICE FEED
         return price/10**8; //8 decimals
+    }
+
+    function depositChain( uint256 amount) public{               //Deposit  Chainlink tokens into the smartcontract
+        chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).transferFrom(msg.sender,address(this),amount);   //Chainlink tokens transferred from user to the contract
+         currentBalance=currentBalance + amount;
+    }
+
+    function withdrawChain (uint256 amount) public{
+        require(msg.sender==user,'Not a user!');
+        require(amount<=currentBalance);                  //Withdraw amount must be <= current Balance
+        currentBalance=currentBalance-amount;
+        chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).approve(user, amount);
+        chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).transferFrom(address(this),user,amount)    
     }
 }
