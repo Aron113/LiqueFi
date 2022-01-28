@@ -59,6 +59,6 @@ contract Liquefi{
         require(amount<=currentBalance);                  //Withdraw amount must be <= current Balance
         currentBalance=currentBalance-amount;
         chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).approve(user, amount);
-        chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).transferFrom(address(this),user,amount)    
+        chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).transferFrom(address(this),user,amount);   
     }
 }
