@@ -31,7 +31,7 @@ contract Liquefi{
     }
 
     function repayLoan() public returns (string memory){     //Function to be called continuously by relayer                            
-        if (priceSet>=5){               //priceSet >= realPrice for our contract to call the lending pool's repay() function
+        if (priceSet>=getLatestPrice()){               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).approve(lendingpool,currentBalance);
         IlendingPool(lendingpool).repay(currentBalance);
         currentBalance=0;}
