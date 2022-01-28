@@ -3,7 +3,7 @@ pragma solidity >=0.7.0 <0.9.0;
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
  interface IlendingPool{                                  //Define lending pool's interface
-        function repay(uint amount) payable external;     //Use lending pool's repay() function
+        function repay(uint amount) external;             //Use lending pool's repay() function
     }
 interface chainlink{                                                                                    //Define chainlink token's interface
     function approve(address spender, uint256 amount) external returns (bool);
@@ -16,15 +16,12 @@ contract Liquefi{
     constructor(address lendingPool) {                  //Enter in lending pool's address
      lendingpool=lendingPool;                   
      user=msg.sender;                                    //Creator of contract
-     
-    
     }
+
     address public lendingpool;
     uint public currentBalance=0;
     address public user;
     int public priceSet;
-    
-   
     
 
     function setPrice(int setprice) public {                //Set repayment price
@@ -34,8 +31,9 @@ contract Liquefi{
 
     function repayLoan() public{                            //Function to be called continuously by relayer
         require(priceSet>=getLatestPrice());                //priceSet >= realPrice for our contract to call the lending pool's repay() function
+        chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).approve(lendingpool,currentBalance);
         IlendingPool(lendingpool).repay(currentBalance);
-        //current balance=0?
+        currentBalance=0;
     
     }
 
