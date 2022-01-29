@@ -2,28 +2,26 @@ const { ethers } = require("ethers");
 const { DefenderRelaySigner, DefenderRelayProvider } = require('defender-relay-client/lib/ethers');
 
 // Inline ABI of the contract we'll be interacting with (check out the rollup example for a better way to handle this!)
-const ERC20_ABI = [
+const ERC20_ABI =[
 	{
-		"inputs": [],
-		"name": "decimals",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
+				"internalType": "address",
+				"name": "lendingPool",
+				"type": "address"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"inputs": [],
-		"name": "description",
+		"name": "currentBalance",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "uint256",
 				"name": "",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -32,86 +30,105 @@ const ERC20_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint80",
-				"name": "_roundId",
-				"type": "uint80"
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			}
 		],
-		"name": "getRoundData",
-		"outputs": [
-			{
-				"internalType": "uint80",
-				"name": "roundId",
-				"type": "uint80"
-			},
-			{
-				"internalType": "int256",
-				"name": "answer",
-				"type": "int256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "updatedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint80",
-				"name": "answeredInRound",
-				"type": "uint80"
-			}
-		],
-		"stateMutability": "view",
+		"name": "depositChain",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "latestRoundData",
+		"name": "getLatestPrice",
 		"outputs": [
-			{
-				"internalType": "uint80",
-				"name": "roundId",
-				"type": "uint80"
-			},
 			{
 				"internalType": "int256",
-				"name": "answer",
-				"type": "int256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "updatedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint80",
-				"name": "answeredInRound",
-				"type": "uint80"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "version",
-		"outputs": [
-			{
-				"internalType": "uint256",
 				"name": "",
-				"type": "uint256"
+				"type": "int256"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lendingpool",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "priceSet",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "repayLoan",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "setprice",
+				"type": "int256"
+			}
+		],
+		"name": "setPrice",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "user",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawChain",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ];
@@ -137,8 +154,8 @@ exports.handler = async function(credentials) {
   // Initialize defender relayer provider and signer
   const provider = new DefenderRelayProvider(credentials);
   const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' });
-  const contractAddress = '0x8bd9eb05cfC232E3f41e0995A474ADf18f32ff55'; // Rinkeby DAI contract
-  return exports.main(signer, await signer.getAddress(), contractAddress); // Send funds to self
+  const contractAddress = '0x8bd9eb05cfC232E3f41e0995A474ADf18f32ff55'; // LiqueFi contract address
+  return exports.main(signer, await signer.getAddress(), contractAddress); 
 }
 
 // To run locally (this code will not be executed in Autotasks)
