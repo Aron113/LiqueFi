@@ -82,13 +82,7 @@ const ERC20_ABI =[
 	{
 		"inputs": [],
 		"name": "repayLoan",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
