@@ -29,7 +29,7 @@ contract Liquefi{
         priceSet=setprice;
     }
 
-    function repayLoan() public returns (string memory){     //Function to be called continuously by relayer                            
+    function repayLoan() public {     //Function to be called continuously by relayer                            
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         require(currentBalance!=0);
         chainlink(0x01BE23585060835E02B77ef475b0Cc51aA1e0709).approve(lendingpool,currentBalance);
