@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";                        //Import Chainlink's datafeeds contract
 
  interface IlendingPool{                                                                                                        //Define lending pool's interface
      function repay(address asset, uint256 amount, uint256 rateMode, address onBehalfOf) external returns (uint256);             //Use lending pool's repay() function  
@@ -14,8 +14,8 @@ interface ERC20{                                                                
     
 contract Liquefi{
    
-    constructor(address lendingpool, address tokenaddress,uint ratemode) {                  //Enter in lending pool's address
-     lendingPool=lendingpool;    
+    constructor(address lendingpool, address tokenaddress,uint ratemode) {                  //Enter in lending pool's details
+     lendingPool=lendingpool;                  
      tokenAddress=tokenaddress;
      rateMode=ratemode;
      user=msg.sender;                                    //Creator of contract
@@ -34,11 +34,11 @@ contract Liquefi{
         priceSet=setprice;
     }
 
-    function repayLoan() public {     //Function to be called continuously by relayer                            
+    function repayLoan() public {                         //Function to be called continuously by relayer                            
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         require(currentBalance!=0);
-        ERC20(tokenAddress).approve(lendingPool,currentBalance);
-        IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);
+        ERC20(tokenAddress).approve(lendingPool,currentBalance);               //lendingPool address is approved to take the tokens from our smart contract
+        IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);    //repay() function of lending pool contract is called
         currentBalance=0;
        
     }
@@ -50,16 +50,16 @@ contract Liquefi{
             uint startedAt,
             uint timeStamp,
             uint80 answeredInRound
-        ) =  AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331).latestRoundData(); // ETH/USD PRICE FEED *SafeMath needed for BUSD/ETH
-        return price/10**8; //8 decimals
+        ) =  AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331).latestRoundData(); // ETH/USD PRICE FEED *SafeMath needed for BUSD/ETH to be able to use decimals
+        return price/10**8; //8 decimals                                                            //Need to include the Datafeed address and decimals in constructor for scaling 
     }
 
-    function depositERC20( uint256 amount) public{               //Deposit ERC20 into the smartcontract
+    function depositERC20( uint256 amount) public{               //Deposit ERC20 into the smart contract
         ERC20(tokenAddress).transferFrom(msg.sender,address(this),amount);   //ERC20 transferred from user to the contract
          currentBalance=currentBalance + amount;                  //New currentBalance calculated
     }
 
-    function withdrawERC20(uint256 amount) public{
+    function withdrawERC20(uint256 amount) public{          //Withdraw ERC20 from smart contract
         require(msg.sender==user,'Not a user!');
         require(amount<=currentBalance);                  //Withdraw amount must be <= current Balance
         currentBalance=currentBalance-amount;              //New currentBalance calculated
