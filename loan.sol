@@ -45,8 +45,8 @@ contract Liquefi{
             uint startedAt,
             uint timeStamp,
             uint80 answeredInRound
-        ) =  AggregatorV3Interface(0xbF7A18ea5DE0501f7559144e702b29c55b055CcB).latestRoundData(); // BUSD/ETH PRICE FEED
-        return 1/price/10**18; //18 decimals
+        ) =  AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331).latestRoundData(); // ETH/USD PRICE FEED *SafeMath needed for BUSD/ETH
+        return price/10*8; //8 decimals
     }
 
     function depositChain( uint256 amount) public{               //Deposit  Kovan BUSD into the smartcontract
