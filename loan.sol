@@ -51,7 +51,7 @@ contract Liquefi{
             uint timeStamp,
             uint80 answeredInRound
         ) =  AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331).latestRoundData(); // ETH/USD PRICE FEED *SafeMath needed for BUSD/ETH
-        return price/10*8; //8 decimals
+        return price/10*18; //18 decimals
     }
 
     function depositERC20( uint256 amount) public{               //Deposit ERC20 into the smartcontract
