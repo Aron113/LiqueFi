@@ -37,7 +37,7 @@ contract Liquefi{
     function repayLoan() public {     //Function to be called continuously by relayer                            
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         require(currentBalance!=0);
-        ERC20(tokenAddress).approve(lendingpool,currentBalance);
+        ERC20(tokenAddress).approve(lendingPool,currentBalance);
         IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);
         currentBalance=0;
        
