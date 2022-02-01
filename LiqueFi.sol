@@ -66,22 +66,22 @@ contract Liquefi{
     function farm(uint mintAmount) public{
         require(msg.sender==user,'Not a user!');
         require(mintAmount<=currentBalance);
-        currentBalance=CurrentBalance-mintAmount;
+        currentBalance=currentBalance-mintAmount;
         mintedAmount=mintedAmount+mintAmount;
-        ERC20(tokenAddress).approve(0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad,mintAmount);
-        FarmingPool(0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad).mint(mintAmount);
+        ERC20(tokenAddress).approve(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD,mintAmount);
+        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).mint(mintAmount);
     }
     
     function redeemFromFarm(uint redeemAmount) public{
         require(msg.sender==user,'Not a user!');
-        FarmingPool(0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad).redeem(redeemAmount);
+        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeem(redeemAmount);
         currentBalance=currentBalance+redeemAmount;
         mintedAmount=mintedAmount-redeemAmount;
     }
     
     function repayLoanfromFarm() public {                                    //Function to be called continuously by relayer   
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
-        FarmingPool(0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad).redeem(mintedAmount);
+        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeem(mintedAmount);
         currentBalance=currentBalance+mintedAmount;
         mintedAmount=0;
         require(currentBalance!=0);
