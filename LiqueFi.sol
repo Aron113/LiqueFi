@@ -9,6 +9,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";    
  interface FarmingPool{
      function mint(uint mintAmount) external returns (uint);
      function redeem(uint redeemTokens) external returns (uint);
+     function redeemUnderlying(uint redeemAmount) external returns (uint);
 }    
 
 interface ERC20{                                                                                    //Define ERC20's interface
@@ -74,14 +75,14 @@ contract Liquefi{
     
     function redeemFromFarm(uint redeemAmount) public{
         require(msg.sender==user,'Not a user!');
-        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeem(redeemAmount);
+        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeemUnderlying(redeemAmount);
         currentBalance=currentBalance+redeemAmount;
         mintedAmount=mintedAmount-redeemAmount;
     }
     
     function repayLoanfromFarm() public {                                    //Function to be called continuously by relayer   
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
-        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeem(mintedAmount);
+        FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeemUnderlying(mintedAmount);
         currentBalance=currentBalance+mintedAmount;
         mintedAmount=0;
         require(currentBalance!=0);
