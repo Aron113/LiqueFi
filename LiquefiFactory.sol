@@ -15,7 +15,7 @@ contract LiquefiFactory{
 
 
     function startLiqueFi(address lendingpool, address tokenaddress,uint ratemode) public {
-        Liquefi newcontract = new Liquefi(lendingpool, tokenaddress, ratemode, address(this));
+        Liquefi newcontract = new Liquefi(lendingpool, tokenaddress, ratemode, address(this), msg.sender);
         liqueFiList.push(newcontract);
         UserContracts[msg.sender].usercontracts.push(address(newcontract));
     }
