@@ -106,7 +106,7 @@ contract Liquefi{
         mintedAmount=0;
         require(currentBalance!=0);
         ERC20(tokenAddress).approve(lendingPool,currentBalance);
-        currentBalance=currentBalance-IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);       //this will actly be the repay() function but for testing we used transfer 
+        currentBalance=currentBalance-IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);        
         state=State.Repaid;
     }
     
