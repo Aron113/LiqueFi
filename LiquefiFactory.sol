@@ -7,7 +7,7 @@ contract LiquefiFactory{
     Liquefi[] public liqueFiList;     //Array of Liquefi smart contract addresses
 
     function startLiqueFi(address lendingpool, address tokenaddress,uint ratemode) public {
-        Liquefi newcontract = new Liquefi(lendingpool, tokenaddress, ratemode);
+        Liquefi newcontract = new Liquefi(lendingpool, tokenaddress, ratemode, address(this));
         liqueFiList.push(newcontract);
     }
 
