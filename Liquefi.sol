@@ -24,11 +24,11 @@ interface Factory{                                                              
 
 contract Liquefi{
    
-    constructor(address lendingpool, address tokenaddress,uint ratemode, address factoryaddress) {                  //Enter in lending pool's details
+    constructor(address lendingpool, address tokenaddress,uint ratemode, address factoryaddress, address _user) {                  //Enter in lending pool's details
      lendingPool=lendingpool;                  
      tokenAddress=tokenaddress;
      rateMode=ratemode;
-     user=msg.sender;                                    //Creator of contract
+     user=_user;                                    //Creator of contract
      Factoryaddress=factoryaddress;
     }
     
