@@ -2,13 +2,209 @@ const { ethers } = require("ethers");
 const { DefenderRelaySigner, DefenderRelayProvider } = require('defender-relay-client/lib/ethers');
 
 
-const LIQUEFI_ABI =[
+const LIQUEFI_ABI =[            //Contract ABI
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "lendingpool",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenaddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ratemode",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "factoryaddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
 	{
 		"inputs": [],
-		"name": "decimals",
+		"name": "ContractList",
 		"outputs": [
 			{
-				"internalType": "uint8",
+				"internalType": "contract Liquefi[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "Factoryaddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "currentBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "depositERC20",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "mintAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "farm",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getLatestPrice",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lendingPool",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "mintedAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "priceSet",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rateMode",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "redeemAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "redeemFromFarm",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "repayLoanfromCurrentBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "repayLoanfromFarm",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "setprice",
+				"type": "int256"
+			}
+		],
+		"name": "setPrice",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "state",
+		"outputs": [
+			{
+				"internalType": "enum Liquefi.State",
 				"name": "",
 				"type": "uint8"
 			}
@@ -18,12 +214,25 @@ const LIQUEFI_ABI =[
 	},
 	{
 		"inputs": [],
-		"name": "description",
+		"name": "tokenAddress",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "address",
 				"name": "",
-				"type": "string"
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "user",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -32,93 +241,20 @@ const LIQUEFI_ABI =[
 	{
 		"inputs": [
 			{
-				"internalType": "uint80",
-				"name": "_roundId",
-				"type": "uint80"
-			}
-		],
-		"name": "getRoundData",
-		"outputs": [
-			{
-				"internalType": "uint80",
-				"name": "roundId",
-				"type": "uint80"
-			},
-			{
-				"internalType": "int256",
-				"name": "answer",
-				"type": "int256"
-			},
-			{
 				"internalType": "uint256",
-				"name": "startedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "updatedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint80",
-				"name": "answeredInRound",
-				"type": "uint80"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "latestRoundData",
-		"outputs": [
-			{
-				"internalType": "uint80",
-				"name": "roundId",
-				"type": "uint80"
-			},
-			{
-				"internalType": "int256",
-				"name": "answer",
-				"type": "int256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "updatedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint80",
-				"name": "answeredInRound",
-				"type": "uint80"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "version",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "withdrawERC20",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ];
 
-var ContractAddressList=['0x18a5572f6617bb704606d76B2a22635c990c2BdC'];     //List of contract address to be called
-//let hello=[];
-//const ccc='0x1dA5a4f0885D678fE84e0f4Ea313D6ae99fBD2AB';
+var ContractAddressList=['0x1f244B8FcEbA8d14C2F40f7E3D816C9C9a3FA489'];     //Array of contract address to be called, NEED TO HAVE AT LEAST 1 EXISTING CONTRACT ALREADY DEPLOYED FOR THE RELAYER TO WORK
+
 exports.handler =  function(credentials) {                                                                    //Get the credentials, don't need to touch this!
   const provider = new DefenderRelayProvider(credentials);
   const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' });              
@@ -127,15 +263,17 @@ exports.handler =  function(credentials) {                                      
 
 exports.main = async function(signer) {
   for (let x in ContractAddressList){                                                                       //Looping through the list of contract addresses
-  const instance = new ethers.Contract(ContractAddressList[x], LIQUEFI_ABI, signer);                              //Getting an instance of the contract for the specific x
+  	const instance = new ethers.Contract(ContractAddressList[x], LIQUEFI_ABI, signer);                              //Getting an instance of the contract for the specific x
 
- try{  const tx = await instance.ContractList(); 
-     const lol = await instance.repayLoanfromCurrentBalance();                                                     //Use try and catch to handle contracts that give errors, continue the loop after catch
-    ContractAddressList.push(tx);
-    }                  //Call a function of the contract
-   
-catch{}
+ 	try{  const newarray = await instance.ContractList();   //Getting array of contracts
+        await ContractAddressList.push(...newarray);		//Concatenating existing array with the obtained array of contracts
+        const repayFromCurrentBalance = await instance.repayLoanfromCurrentBalance();        //Calling the repay from current balance function                                             //Use try and catch to handle contracts that give errors, continue the loop after catch
+   	    const repayFromFarm = await instance.repayLoanfromFarm();							//Calling the repay from farm function
+       }                  
+  
+	catch{console.log('not working')
+       }
 	
-}
-return ContractAddressList;
+  }
+return ContractAddressList; //See the latest array of contract addresses
 }
