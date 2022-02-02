@@ -31,6 +31,16 @@ contract Liquefi{
      user=msg.sender;                                    //Creator of contract
      Factoryaddress=factoryaddress;
     }
+    
+    modifier CurrentState(State _state) {
+          require(state==_state);
+          _;
+    }
+    
+    enum State{
+          NotRepaid,
+          Repaid
+    }
 
     address public lendingPool;
     address public tokenAddress;
@@ -89,23 +99,22 @@ contract Liquefi{
         mintedAmount=mintedAmount-redeemAmount;
     }
     
-    function repayLoanfromFarm() public {                                    //Function to be called continuously by relayer   
+    function repayLoanfromFarm() public  CurrentState(State.NotRepaid) {                                    //Function to be called continuously by relayer   
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         FarmingPool(0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD).redeemUnderlying(mintedAmount);
         currentBalance=currentBalance+mintedAmount;                             //can change this to farmRepaymentBalance
         mintedAmount=0;
         require(currentBalance!=0);
         ERC20(tokenAddress).approve(lendingPool,currentBalance);
-        ERC20(tokenAddress).transfer(lendingPool,currentBalance);       //this will actly be the repay() function but for testing we used transfer
-        currentBalance=0;
+        currentBalance=currentBalance-IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);       //this will actly be the repay() function but for testing we used transfer 
+        state=State.Repaid;
     }
     
-     function repayLoanfromCurrentBalance() public {                         //Function to be called continuously by relayer                            
+     function repayLoanfromCurrentBalance() public CurrentState(State.NotRepaid) {                         //Function to be called continuously by relayer                            
         require(priceSet>=getLatestPrice());               //priceSet >= realPrice for our contract to call the lending pool's repay() function
         require(currentBalance!=0);
         ERC20(tokenAddress).approve(lendingPool,currentBalance);               //lendingPool address is approved to take the tokens from our smart contract
-        IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);    //repay() function of lending pool contract is called
-        currentBalance=0;
-       
-    }
+        currentBalance=currentBalance-IlendingPool(lendingPool).repay(tokenAddress,currentBalance,rateMode,user);    //repay() function of lending pool contract is called
+        state=State.Repaid;
+    }                                                                                                    //If the loan is overpaid, overflow is returned back to smart contract and user can withdraw the overflow
 }
