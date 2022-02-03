@@ -263,17 +263,17 @@ exports.handler =  function(credentials) {                                      
 
 exports.main = async function(signer) {
   for (let x in ContractAddressList){                                                                       //Looping through the list of contract addresses
-  	const instance = new ethers.Contract(ContractAddressList[x], LIQUEFI_ABI, signer);                              //Getting an instance of the contract for the specific x
+  	const instance = new ethers.Contract(ContractAddressList[x], LIQUEFI_ABI, signer);                 //Getting an instance of the contract for the specific x
 
- 	try{  const newarray = await instance.ContractList();   //Getting array of contracts
-        await ContractAddressList.push(...newarray);		//Concatenating existing array with the obtained array of contracts
-        const repayFromCurrentBalance = await instance.repayLoanfromCurrentBalance();        //Calling the repay from current balance function                                             //Use try and catch to handle contracts that give errors, continue the loop after catch
-   	    const repayFromFarm = await instance.repayLoanfromFarm();							//Calling the repay from farm function
+ 	try{  const newarray = await instance.ContractList();  					 //Getting array of contracts
+      	      await ContractAddressList.push(...newarray);					//Concatenating existing array with the obtained array of contracts
+       	      const repayFromCurrentBalance = await instance.repayLoanfromCurrentBalance();     //Calling the repay from current balance function                                             
+   	      const repayFromFarm = await instance.repayLoanfromFarm();				//Calling the repay from farm function
        }                  
   
 	catch{console.log('not working')
        }
 	
   }
-return ContractAddressList; //See the latest array of contract addresses
+return ContractAddressList;	 //See the latest array of contract addresses
 }
