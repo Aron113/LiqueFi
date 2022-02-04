@@ -1,8 +1,14 @@
-# LiqueFi
-Automatic loan repayment service
+<img width="492" alt="liquefilogo" src="https://user-images.githubusercontent.com/93630749/152523463-5c7f45b9-204b-437f-b16a-107b887d83c8.png">
 
-Stack
-FrontEnd 
-React
-Open Zeppelin Defenders
-Remix IDE
+## Description
+Automated Loan Repayment and Lending/Staking 
+
+## Stack
+ 
+* ReactJS  
+* EthersJS  
+* Open Zeppelin Defenders Autotasks  
+* Chainlink Data Feeds
+* Remix IDE  
+* Solidity  
+
