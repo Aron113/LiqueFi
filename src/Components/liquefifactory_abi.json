@@ -1,0 +1,95 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "UserContracts",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "nil",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "liqueFiList",
+		"outputs": [
+			{
+				"internalType": "contract Liquefi",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "lendingpool",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenaddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ratemode",
+				"type": "uint256"
+			}
+		],
+		"name": "startLiqueFi",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "viewLiquefiContracts",
+		"outputs": [
+			{
+				"internalType": "contract Liquefi[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "viewusercontracts",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
