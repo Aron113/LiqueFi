@@ -2,7 +2,8 @@
 
 ## Description
 Automated Loan Repayment and Lending/Staking  
-[LiqueFi](lique-fi.vercel.app)
+lique-fi.vercel.app
+
 
 ## Stack
 * Vercel  
